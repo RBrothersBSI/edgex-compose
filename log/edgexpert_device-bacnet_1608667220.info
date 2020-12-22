@@ -1,0 +1,276 @@
+CONTAINER INFO:
+[
+    {
+        "Id": "2e0becc3bee3fa554c996779a018b49e649b8b2cd3932118e53405b1d2cf8711",
+        "Created": "2020-12-22T19:51:44.565435171Z",
+        "Path": "/device-bacnet-ip",
+        "Args": [],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 3383,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2020-12-22T19:59:52.490891672Z",
+            "FinishedAt": "2020-12-22T19:58:17.093873898Z"
+        },
+        "Image": "sha256:5da32a7517ec91e55194b0f7eae28d3e29047a1f7f57494d8896f80c8e95b310",
+        "ResolvConfPath": "/var/lib/docker/containers/2e0becc3bee3fa554c996779a018b49e649b8b2cd3932118e53405b1d2cf8711/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/2e0becc3bee3fa554c996779a018b49e649b8b2cd3932118e53405b1d2cf8711/hostname",
+        "HostsPath": "/var/lib/docker/containers/2e0becc3bee3fa554c996779a018b49e649b8b2cd3932118e53405b1d2cf8711/hosts",
+        "LogPath": "/var/lib/docker/containers/2e0becc3bee3fa554c996779a018b49e649b8b2cd3932118e53405b1d2cf8711/2e0becc3bee3fa554c996779a018b49e649b8b2cd3932118e53405b1d2cf8711-json.log",
+        "Name": "/device-bacnet",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "docker-default",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {
+                    "max-file": "20",
+                    "max-size": "10mb"
+                }
+            },
+            "NetworkMode": "edgexpert_edgex-network",
+            "PortBindings": {
+                "49980/tcp": [
+                    {
+                        "HostIp": "",
+                        "HostPort": "49980"
+                    }
+                ]
+            },
+            "RestartPolicy": {
+                "Name": "",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": [],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "host",
+            "Dns": null,
+            "DnsOptions": null,
+            "DnsSearch": null,
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "shareable",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": null,
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": null,
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "KernelMemory": 0,
+            "KernelMemoryTCP": 0,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": null,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "Mounts": [
+                {
+                    "Type": "volume",
+                    "Source": "edgexpert_license-data",
+                    "Target": "/edgexpert/licenses/",
+                    "ReadOnly": true
+                }
+            ],
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/98bac07db1c42a8eb17ffc61400c261a1cdc1a9eb69b03a474505f5bf3eab5ef-init/diff:/var/lib/docker/overlay2/677e9d29df8a4acc5972e8739b4097251f59695a66ca16623644dd575dfcc8b3/diff:/var/lib/docker/overlay2/d97ebd3284608877cdb7fd6f1489fa7ddd97b9d9a9416ea713dd7bbf2ae4dff8/diff:/var/lib/docker/overlay2/8a638281494e6b43fb3535ae67fcdc5355b2230ad377399cb93a7f2369fb154a/diff:/var/lib/docker/overlay2/972be43105e803e15df935996690289f244d109f24e7650be15f83b2433257b5/diff:/var/lib/docker/overlay2/b008c191a95186a098a3f0ad058776c0f81a2ef82fa88cb1e02a4bc1f3c156e7/diff:/var/lib/docker/overlay2/0f8d51f8966b3d755fcfccf30129adc0415357195d0429241dbd08da7c526901/diff:/var/lib/docker/overlay2/1f138efbd2cdd688a0cd2e8d16ac71c5276ba9952812e4be8c295349061085fe/diff:/var/lib/docker/overlay2/4eed49215879620c2c2d91cc4077427cb3c32fb1b27a61bc0dd8e0a8fb182839/diff:/var/lib/docker/overlay2/8395999a8fb6077dea6d7d855de79b7a85b34b5157b052b4d46f68fe247bc43c/diff:/var/lib/docker/overlay2/94e4d2c53d5175067d80fb4571c67c2e1d472a4e55ac71244b7790d6a37552bd/diff:/var/lib/docker/overlay2/80e9a9c1dbac6c53be20994b418be985fadabe19a3520378cf249183cff98f3e/diff:/var/lib/docker/overlay2/5810d3a9a8076d303cbe19a2fa9a334c5e3f237ca1bd489fb274be88b84ee526/diff:/var/lib/docker/overlay2/11328c126dff612916bebed9de3860da99364ef07b66cb03eb4852ccf178acb5/diff",
+                "MergedDir": "/var/lib/docker/overlay2/98bac07db1c42a8eb17ffc61400c261a1cdc1a9eb69b03a474505f5bf3eab5ef/merged",
+                "UpperDir": "/var/lib/docker/overlay2/98bac07db1c42a8eb17ffc61400c261a1cdc1a9eb69b03a474505f5bf3eab5ef/diff",
+                "WorkDir": "/var/lib/docker/overlay2/98bac07db1c42a8eb17ffc61400c261a1cdc1a9eb69b03a474505f5bf3eab5ef/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "volume",
+                "Name": "edgexpert_license-data",
+                "Source": "/var/lib/docker/volumes/edgexpert_license-data/_data",
+                "Destination": "/edgexpert/licenses",
+                "Driver": "local",
+                "Mode": "z",
+                "RW": false,
+                "Propagation": ""
+            }
+        ],
+        "Config": {
+            "Hostname": "device-bacnet",
+            "Domainname": "",
+            "User": "bacnet-user",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "49980/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "EDGEX_SECURITY_SECRET_STORE=false",
+                "Registry_Host=edgex-core-consul",
+                "Clients_Data_Host=edgex-core-data",
+                "Clients_CoreData_Host=edgex-core-data",
+                "Clients_Notifications_Host=edgex-support-notifications",
+                "Clients_Metadata_Host=edgex-core-metadata",
+                "Clients_Command_Host=edgex-core-command",
+                "Clients_Scheduler_Host=edgex-support-scheduler",
+                "Clients_RulesEngine_Host=kuiper",
+                "Clients_VirtualDevice_Host=device-virtual",
+                "Databases_Primary_Host=edgex-redis",
+                "Clients_Logging_Host=edgex-support-logging",
+                "Logging_EnableRemote=false",
+                "edgex_registry_retry_count=5",
+                "edgex_registry_retry_wait=5",
+                "EDGEXPERT_LICENSE_PATH=/edgexpert/licenses/",
+                "Service_Host=device-bacnet",
+                "BACNET_BBMD_ADDRESS=",
+                "BACNET_BBMD_PORT=",
+                "DEFAULT_DEVICE_PATH=",
+                "EDGEX_CONF_DIR=/res/ip",
+                "EDGEX_CONFIGURATION_PROVIDER=consul://edgex-core-consul:8500",
+                "EDGEX_INSTANCE_NAME=device-bacnet",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "VER=1.7.4",
+                "SHA=638dafb34fe8ac1d5f5b2a47a6bda249876c0a23"
+            ],
+            "Cmd": null,
+            "Image": "iotechsys/edgexpert-device-bacnet:1.7",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": [
+                "/device-bacnet-ip"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "com.docker.compose.config-hash": "ae112f9f57e1b8a052573947201b3cc88465db114a1f3ed99ae798440f38d6f2",
+                "com.docker.compose.container-number": "1",
+                "com.docker.compose.oneoff": "False",
+                "com.docker.compose.project": "edgexpert",
+                "com.docker.compose.project.config_files": "docker-compose.yml",
+                "com.docker.compose.project.working_dir": "/home/snuc/Edgex/local-compose",
+                "com.docker.compose.service": "device-bacnet",
+                "com.docker.compose.version": "1.26.2",
+                "maintainer": "iotech <support@iotechsys.com>",
+                "sha": "638dafb34fe8ac1d5f5b2a47a6bda249876c0a23",
+                "version": "1.7.4"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "b72781717e178021952779073b8699333ae4e15532c309795ee93dfb8be0cc7a",
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": {
+                "49980/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "49980"
+                    }
+                ]
+            },
+            "SandboxKey": "/var/run/docker/netns/b72781717e17",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "edgexpert_edgex-network": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "device-bacnet",
+                        "2e0becc3bee3"
+                    ],
+                    "NetworkID": "ec7e1b3c91684b3f95bb52d27c0f7456fde96067603aa270dbf14cf5c23cede1",
+                    "EndpointID": "4ed115ba241eb48b08c82f5e5a4d4f4a312d6baaa026f7b014dabac3b63c49e0",
+                    "Gateway": "172.20.0.1",
+                    "IPAddress": "172.20.0.16",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:ac:14:00:10",
+                    "DriverOpts": null
+                }
+            }
+        }
+    }
+]

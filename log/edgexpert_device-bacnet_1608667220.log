@@ -1,0 +1,154 @@
+LOGS:
+2020-12-22T19:51:45.425684153Z Edge Xpert Licensing: Validating License File EdgeXpert_Ryan_Brothers_DeveloperKit.lic
+2020-12-22T19:51:45.426691790Z Edge Xpert Licensing: Signature valid
+2020-12-22T19:51:45.426702998Z Edge Xpert Licensing: License valid
+2020-12-22T19:51:45.426706724Z Edge Xpert Licensing: Service Not Licensed
+2020-12-22T19:51:45.426709586Z Edge Xpert Licensing: Validating License File EdgeXpert_Ryan_Brothers_Development.lic
+2020-12-22T19:51:45.426713098Z Edge Xpert Licensing: Signature valid
+2020-12-22T19:51:45.426715851Z Edge Xpert Licensing: License valid
+2020-12-22T19:51:45.426718573Z Edge Xpert Licensing: Service Licensed
+2020-12-22T19:51:45.426721421Z level=INFO ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="iot_threadpool_alloc (threads: 8 max_jobs: 0 default_priority: -1 affinity: -1)"
+2020-12-22T19:51:45.426742728Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread iot-0-0 starting"
+2020-12-22T19:51:45.426772226Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread iot-0-1 starting"
+2020-12-22T19:51:45.426775958Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread iot-0-2 starting"
+2020-12-22T19:51:45.426801072Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread iot-0-3 starting"
+2020-12-22T19:51:45.426808473Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread iot-0-4 starting"
+2020-12-22T19:51:45.426827196Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread iot-0-6 starting"
+2020-12-22T19:51:45.426848205Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread iot-0-7 starting"
+2020-12-22T19:51:45.428218084Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread iot-0-5 starting"
+2020-12-22T19:51:45.428380748Z level=INFO ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="iot_scheduler_alloc (priority: -1 affinity: -1)"
+2020-12-22T19:51:45.428417412Z level=TRACE ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="iot_threadpool_start()"
+2020-12-22T19:51:45.428432072Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:51:45.428444951Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:51:45.428454720Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:51:45.428472703Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:51:45.428491145Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:51:45.428496461Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:51:45.428514539Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:51:45.428531656Z level=DEBUG ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:51:45.429551681Z level=INFO ts=2020-12-22T19:51:45Z app=device-bacnet_device-bacnet msg="Found registry service at consul://edgex-core-consul:8500"
+2020-12-22T19:51:49.154072047Z level=TRACE ts=2020-12-22T19:51:49Z app=device-bacnet_device-bacnet msg="iot_threadpool_add_work()"
+2020-12-22T19:51:49.154146383Z level=DEBUG ts=2020-12-22T19:51:49Z app=device-bacnet_device-bacnet msg="Added new job #0"
+2020-12-22T19:51:49.154160483Z level=DEBUG ts=2020-12-22T19:51:49Z app=device-bacnet_device-bacnet msg="iot_threadpool_add_work jobs/max: 1/4294967295"
+2020-12-22T19:51:49.154170267Z level=DEBUG ts=2020-12-22T19:51:49Z app=device-bacnet_device-bacnet msg="Thread processing job #0"
+2020-12-22T19:51:49.154183674Z level=INFO ts=2020-12-22T19:51:49Z app=device-bacnet_device-bacnet msg="Override config Service/Host = device-bacnet"
+2020-12-22T19:51:49.154250245Z level=INFO ts=2020-12-22T19:51:49Z app=device-bacnet_device-bacnet msg="Setting LogLevel to WARNING"
+2020-12-22T19:51:49.167257909Z Trying to register with BBMD at 192.168.55.252:47808 for 60000 seconds
+2020-12-22T19:52:19.000559717Z FAILED to Register with BBMD at 192.168.55.252 
+2020-12-22T19:52:19.000624425Z level=ERROR ts=2020-12-22T19:52:19Z app=device-bacnet_device-bacnet msg="An error occurred while initializing the BACnet driver"
+2020-12-22T19:52:19.028000202Z level=ERROR ts=2020-12-22T19:52:19Z app=device-bacnet_device-bacnet msg="Protocol driver initialization failed"
+2020-12-22T19:52:19.028099275Z Error: 14: Protocol driver initialization failed
+2020-12-22T19:55:07.621245996Z Edge Xpert Licensing: Validating License File EdgeXpert_Ryan_Brothers_DeveloperKit.lic
+2020-12-22T19:55:07.622277140Z Edge Xpert Licensing: Signature valid
+2020-12-22T19:55:07.622286613Z Edge Xpert Licensing: License valid
+2020-12-22T19:55:07.622289548Z Edge Xpert Licensing: Service Not Licensed
+2020-12-22T19:55:07.622291923Z Edge Xpert Licensing: Validating License File EdgeXpert_Ryan_Brothers_Development.lic
+2020-12-22T19:55:07.622294663Z Edge Xpert Licensing: Signature valid
+2020-12-22T19:55:07.622296765Z Edge Xpert Licensing: License valid
+2020-12-22T19:55:07.622298854Z Edge Xpert Licensing: Service Licensed
+2020-12-22T19:55:07.622300961Z level=INFO ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="iot_threadpool_alloc (threads: 8 max_jobs: 0 default_priority: -1 affinity: -1)"
+2020-12-22T19:55:07.622327524Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread iot-0-0 starting"
+2020-12-22T19:55:07.622332786Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread iot-0-1 starting"
+2020-12-22T19:55:07.622368512Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread iot-0-2 starting"
+2020-12-22T19:55:07.622376115Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread iot-0-3 starting"
+2020-12-22T19:55:07.622383616Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread iot-0-4 starting"
+2020-12-22T19:55:07.622406840Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread iot-0-6 starting"
+2020-12-22T19:55:07.622427957Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread iot-0-7 starting"
+2020-12-22T19:55:07.622458051Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread iot-0-5 starting"
+2020-12-22T19:55:07.622576690Z level=INFO ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="iot_scheduler_alloc (priority: -1 affinity: -1)"
+2020-12-22T19:55:07.622600874Z level=TRACE ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="iot_threadpool_start()"
+2020-12-22T19:55:07.622611577Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:55:07.622628344Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:55:07.622643223Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:55:07.622659042Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:55:07.622685329Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:55:07.622696444Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:55:07.622703459Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:55:07.622706281Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:55:07.623795572Z level=INFO ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Found registry service at consul://edgex-core-consul:8500"
+2020-12-22T19:55:07.624407085Z level=TRACE ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="iot_threadpool_add_work()"
+2020-12-22T19:55:07.624416700Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Added new job #0"
+2020-12-22T19:55:07.624419573Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="iot_threadpool_add_work jobs/max: 1/4294967295"
+2020-12-22T19:55:07.624422701Z level=DEBUG ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Thread processing job #0"
+2020-12-22T19:55:07.624424770Z level=INFO ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Override config Service/Host = device-bacnet"
+2020-12-22T19:55:07.624465426Z level=INFO ts=2020-12-22T19:55:07Z app=device-bacnet_device-bacnet msg="Setting LogLevel to WARNING"
+2020-12-22T19:55:07.633228991Z Trying to register with BBMD at 192.168.55.252:47808 for 60000 seconds
+2020-12-22T19:55:37.000279060Z FAILED to Register with BBMD at 192.168.55.252 
+2020-12-22T19:55:37.000279063Z level=ERROR ts=2020-12-22T19:55:37Z app=device-bacnet_device-bacnet msg="An error occurred while initializing the BACnet driver"
+2020-12-22T19:55:37.093140115Z Error: 14: Protocol driver initialization failed
+2020-12-22T19:55:37.093241238Z level=ERROR ts=2020-12-22T19:55:37Z app=device-bacnet_device-bacnet msg="Protocol driver initialization failed"
+2020-12-22T19:57:47.387919868Z Edge Xpert Licensing: Validating License File EdgeXpert_Ryan_Brothers_DeveloperKit.lic
+2020-12-22T19:57:47.388920547Z Edge Xpert Licensing: Signature valid
+2020-12-22T19:57:47.388931578Z Edge Xpert Licensing: License valid
+2020-12-22T19:57:47.388934413Z Edge Xpert Licensing: Service Not Licensed
+2020-12-22T19:57:47.388936605Z Edge Xpert Licensing: Validating License File EdgeXpert_Ryan_Brothers_Development.lic
+2020-12-22T19:57:47.388938768Z Edge Xpert Licensing: Signature valid
+2020-12-22T19:57:47.388940950Z Edge Xpert Licensing: License valid
+2020-12-22T19:57:47.388943321Z Edge Xpert Licensing: Service Licensed
+2020-12-22T19:57:47.388945484Z level=INFO ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="iot_threadpool_alloc (threads: 8 max_jobs: 0 default_priority: -1 affinity: -1)"
+2020-12-22T19:57:47.388969240Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread iot-0-0 starting"
+2020-12-22T19:57:47.388993775Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread iot-0-1 starting"
+2020-12-22T19:57:47.389000568Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread iot-0-2 starting"
+2020-12-22T19:57:47.389008716Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread iot-0-3 starting"
+2020-12-22T19:57:47.389015442Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread iot-0-4 starting"
+2020-12-22T19:57:47.389036049Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread iot-0-5 starting"
+2020-12-22T19:57:47.389039021Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread iot-0-6 starting"
+2020-12-22T19:57:47.389061607Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread iot-0-7 starting"
+2020-12-22T19:57:47.389208214Z level=INFO ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="iot_scheduler_alloc (priority: -1 affinity: -1)"
+2020-12-22T19:57:47.389229306Z level=TRACE ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="iot_threadpool_start()"
+2020-12-22T19:57:47.389248502Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:57:47.389261481Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:57:47.389276999Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:57:47.389290758Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:57:47.389302491Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:57:47.389314622Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:57:47.389334230Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:57:47.389343229Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:57:47.390432811Z level=INFO ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Found registry service at consul://edgex-core-consul:8500"
+2020-12-22T19:57:47.391101753Z level=TRACE ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="iot_threadpool_add_work()"
+2020-12-22T19:57:47.391113381Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Added new job #0"
+2020-12-22T19:57:47.391117673Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="iot_threadpool_add_work jobs/max: 1/4294967295"
+2020-12-22T19:57:47.391121481Z level=DEBUG ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Thread processing job #0"
+2020-12-22T19:57:47.391126960Z level=INFO ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Override config Service/Host = device-bacnet"
+2020-12-22T19:57:47.391152865Z level=INFO ts=2020-12-22T19:57:47Z app=device-bacnet_device-bacnet msg="Setting LogLevel to WARNING"
+2020-12-22T19:57:47.400124521Z Trying to register with BBMD at 192.168.55.252:47808 for 60000 seconds
+2020-12-22T19:58:17.000668518Z level=ERROR ts=2020-12-22T19:58:17Z app=device-bacnet_device-bacnet msg="An error occurred while initializing the BACnet driver"
+2020-12-22T19:58:17.000749674Z FAILED to Register with BBMD at 192.168.55.252 
+2020-12-22T19:58:17.063955493Z Error: 14: Protocol driver initialization failed
+2020-12-22T19:58:17.064060814Z level=ERROR ts=2020-12-22T19:58:17Z app=device-bacnet_device-bacnet msg="Protocol driver initialization failed"
+2020-12-22T19:59:52.492942758Z Edge Xpert Licensing: Validating License File EdgeXpert_Ryan_Brothers_DeveloperKit.lic
+2020-12-22T19:59:52.493985677Z Edge Xpert Licensing: Signature valid
+2020-12-22T19:59:52.493995601Z Edge Xpert Licensing: License valid
+2020-12-22T19:59:52.493998710Z Edge Xpert Licensing: Service Not Licensed
+2020-12-22T19:59:52.494001064Z Edge Xpert Licensing: Validating License File EdgeXpert_Ryan_Brothers_Development.lic
+2020-12-22T19:59:52.494003416Z Edge Xpert Licensing: Signature valid
+2020-12-22T19:59:52.494005434Z Edge Xpert Licensing: License valid
+2020-12-22T19:59:52.494007628Z Edge Xpert Licensing: Service Licensed
+2020-12-22T19:59:52.494009792Z level=INFO ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="iot_threadpool_alloc (threads: 8 max_jobs: 0 default_priority: -1 affinity: -1)"
+2020-12-22T19:59:52.494080982Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread iot-0-0 starting"
+2020-12-22T19:59:52.494094193Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread iot-0-1 starting"
+2020-12-22T19:59:52.494097441Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread iot-0-2 starting"
+2020-12-22T19:59:52.494110105Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread iot-0-3 starting"
+2020-12-22T19:59:52.494112492Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread iot-0-4 starting"
+2020-12-22T19:59:52.494134495Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread iot-0-5 starting"
+2020-12-22T19:59:52.494141532Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread iot-0-6 starting"
+2020-12-22T19:59:52.494162556Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread iot-0-7 starting"
+2020-12-22T19:59:52.494306749Z level=INFO ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="iot_scheduler_alloc (priority: -1 affinity: -1)"
+2020-12-22T19:59:52.494327146Z level=TRACE ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="iot_threadpool_start()"
+2020-12-22T19:59:52.494350735Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:59:52.494358071Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:59:52.494377034Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:59:52.494383449Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:59:52.494390250Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:59:52.494401824Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:59:52.494410073Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:59:52.494425416Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread waiting for new job"
+2020-12-22T19:59:52.495645907Z level=INFO ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Found registry service at consul://edgex-core-consul:8500"
+2020-12-22T19:59:52.496304024Z level=TRACE ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="iot_threadpool_add_work()"
+2020-12-22T19:59:52.496313973Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Added new job #0"
+2020-12-22T19:59:52.496318416Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="iot_threadpool_add_work jobs/max: 1/4294967295"
+2020-12-22T19:59:52.496328005Z level=DEBUG ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Thread processing job #0"
+2020-12-22T19:59:52.496331514Z level=INFO ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Override config Service/Host = device-bacnet"
+2020-12-22T19:59:52.496376434Z level=INFO ts=2020-12-22T19:59:52Z app=device-bacnet_device-bacnet msg="Setting LogLevel to WARNING"
+2020-12-22T19:59:52.504900953Z Trying to register with BBMD at 192.168.55.252:47808 for 60000 seconds
+2020-12-22T19:59:52.507802264Z SUCCEEDED to Register with BBMD at 192.168.55.252

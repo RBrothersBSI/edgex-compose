@@ -1,0 +1,1215 @@
+version: '3.7'
+volumes:
+  db-data:
+  consul-data:
+  consul-config:
+  # export
+  export-data:
+  # edgexpert
+  grafana-data:
+  nodered-data:
+  portainer-data:
+  xpert-manager-data:
+  license-data:
+  profile-modeling-data:
+  influxdb-data:
+
+
+# all common shared environment variables defined here:
+x-common-env-variables: &common-variables
+  EDGEX_SECURITY_SECRET_STORE: "false"
+  Registry_Host: edgex-core-consul
+  Clients_Data_Host: edgex-core-data
+  Clients_CoreData_Host: edgex-core-data
+  Clients_Notifications_Host: edgex-support-notifications
+  Clients_Metadata_Host: edgex-core-metadata
+  Clients_Command_Host: edgex-core-command
+  Clients_Scheduler_Host: edgex-support-scheduler
+  Clients_RulesEngine_Host: kuiper
+  Clients_VirtualDevice_Host: device-virtual
+  Databases_Primary_Host: edgex-redis
+  # logging
+  Clients_Logging_Host: edgex-support-logging
+  Logging_EnableRemote: ${EX_REMOTE_LOGGING:-false}
+  # v1.6
+  edgex_registry_retry_count: 5
+  edgex_registry_retry_wait: 5
+  # license
+  EDGEXPERT_LICENSE_PATH: /edgexpert/licenses/
+
+services:
+
+  #################################################################
+  # Registry Services
+  #################################################################
+
+  consul:
+    image: iotechsys/${EX_REPO}-consul:${EX_VER}
+    container_name: consul
+    hostname: consul
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-core-consul
+    environment:
+      - EDGEX_DB=redis
+      - EDGEX_SECURE=false
+    volumes:
+      - consul-config:/consul/config:z
+      - consul-data:/consul/data:z
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  #################################################################
+  # Database Services
+  #################################################################
+
+  redis:
+    image: iotechsys/${EX_REPO}-redis:${EX_VER}
+    container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks:
+      edgex-network:
+        aliases:
+            - edgex-redis
+    environment:
+      <<: *common-variables
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - db-data:/data:z
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  #################################################################
+  # Core Services
+  #################################################################
+
+  core-metadata:
+    image: iotechsys/${EX_REPO}-core-metadata:${EX_VER}
+    container_name: core-metadata
+    hostname: core-metadata
+    entrypoint: /core-metadata
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    ports:
+      - "48081:48081"
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-core-metadata
+    environment:
+      <<: *common-variables
+      Service_Host: core-metadata
+      Notifications_Sender: core-metadata
+      Notifications_PostDeviceChanges: ${EX_SUPPORT_NOTIFICATION:-false}
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - consul
+      - redis
+      - support-notifications
+
+  core-data:
+    image: iotechsys/${EX_REPO}-core-data:${EX_VER}
+    container_name: core-data
+    hostname: core-data
+    entrypoint: /core-data
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    ports:
+      - "48080:48080"
+      - "5563:5563"
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-core-data
+    environment:
+      <<: *common-variables
+      Service_Host: core-data
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - consul
+      - redis
+      - core-metadata
+
+  core-command:
+    image: iotechsys/${EX_REPO}-core-command:${EX_VER}
+    container_name: core-command
+    hostname: core-command
+    entrypoint: /core-command
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    ports:
+      - "48082:48082"
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-core-command
+    environment:
+      <<: *common-variables
+      Service_Host: core-command
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - consul
+      - redis
+      - core-metadata
+
+  #################################################################
+  # Export Services
+  #################################################################
+
+  export-client:
+    image: iotechsys/${EX_REPO}-export-client:${EX_VER}
+    container_name: export-client
+    hostname: export-client
+    entrypoint: /export-client
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    ports:
+      - "48071:48071"
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-export-client
+    environment:
+      <<: *common-variables
+      Service_Host: export-client
+      Clients_Distro_Host: export-distro
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - core-data
+
+  export-distro:
+    image: iotechsys/${EX_REPO}-export-distro:${EX_VER}
+    container_name: export-distro
+    hostname: export-distro
+    entrypoint: /export-distro
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    ports:
+      - "48070:48070"
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-export-distro
+    environment:
+      <<: *common-variables
+      Service_Host: export-distro
+      Clients_Export_Host: export-client
+      MessageQueue_Host: core-data
+      Certificates_MQTTS_Cert: 'dummy.crt'
+      Certificates_MQTTS_Key: 'dummy.key'
+      Certificates_AWS_Cert: 'dummy.crt'
+      Certificates_AWS_Key: 'dummy.key'
+    volumes:
+      - export-data:/export/keys
+      - license-data:/edgexpert/licenses/:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - export-client
+
+  #################################################################
+  # Application Services
+  #################################################################
+
+  # for pull image purpose only
+  # the real usage is defined in app-service.yml
+  app-service:
+    image: iotechsys/${EX_REPO}-app-configurable:${EX_VER}
+
+  #################################################################
+  # Supporting Services
+  #################################################################
+
+  support-notifications:
+    image: iotechsys/${EX_REPO}-support-notifications:${EX_VER}
+    container_name: support-notifications
+    hostname: support-notifications
+    entrypoint: /support-notifications
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    ports:
+      - "48060:48060"
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-support-notifications
+    environment:
+      <<: *common-variables
+      Service_Host: support-notifications
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - consul
+      - redis
+
+  support-scheduler:
+    image: iotechsys/${EX_REPO}-support-scheduler:${EX_VER}
+    container_name: support-scheduler
+    hostname: support-scheduler
+    entrypoint: /support-scheduler
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    ports:
+      - "48085:48085"
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-support-scheduler
+    environment:
+      <<: *common-variables
+      Service_Host: support-scheduler
+      IntervalActions_ScrubPushed_Host: core-data
+      IntervalActions_ScrubAged_Host: core-data
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - consul
+      - redis
+
+  support-logging:
+    image: iotechsys/${EX_REPO}-support-logging:${EX_VER}
+    container_name: support-logging
+    hostname: support-logging
+    entrypoint: /support-logging
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    ports:
+      - "48061:48061"
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-support-logging
+    environment:
+      <<: *common-variables
+      Service_Host: support-logging
+      Writable_Persistence: file
+      Databases_Primary_Type: file
+      Logging_EnableRemote: "false"
+      Logging_File: "/edgex/log/edgex-support-logging.log"
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    depends_on:
+      - consul
+
+  #################################################################
+  # System Management
+  #################################################################
+
+  sys-mgmt:
+    image: iotechsys/${EX_REPO}-sys-mgmt-agent:${EX_VER}
+    container_name: sys-mgmt
+    hostname: sys-mgmt
+    entrypoint: /sys-mgmt-agent
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    ports:
+      - "48090:48090"
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: sys-mgmt
+      ExecutorPath: /sys-mgmt-executor
+      MetricsMechanism: executor
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:z
+      - license-data:/edgexpert/licenses/:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - consul
+      - support-scheduler
+      - support-notifications
+      - core-command
+      - core-data
+      - core-metadata
+
+  #################################################################
+  # Management Console
+  #################################################################
+
+  xpert-manager:
+    image: iotechsys/${EX_REPO}-iotech-manager:${EX_VER}
+    container_name: xpert-manager
+    hostname: xpert-manager
+    entrypoint: /root/go-ui-server
+    ports:
+      - "8080:8080"
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+    volumes:
+      #- vault-config:/vault/config
+      - xpert-manager-data:/xpert-manager/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+
+  #################################################################
+  # Web Toolkit
+  #################################################################
+
+  profile-modeling:
+    image: iotechsys/${EX_REPO}-profile-modeling:${EX_VER}
+    container_name: profile-modeling
+    hostname: profile-modeling
+    ports:
+      - "3006:3006"
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+    volumes:
+      - profile-modeling-data:/profile-modeling/data
+      - license-data:/edgexpert/licenses/:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - core-metadata
+
+  #################################################################
+  # Device Services
+  #################################################################
+
+  device-opc-ua:
+    image: iotechsys/${EX_REPO}-device-opc-ua:${EX_VER}
+    container_name: device-opc-ua
+    hostname: device-opc-ua
+    networks:
+      - edgex-network
+    ports:
+      - "49983:49983"
+    environment:
+      <<: *common-variables
+      Service_Host: device-opc-ua
+      LDSName: ${LDSName:-}
+      DiscoveryCertificate: ${DiscoveryCertificate:-}
+      DiscoveryKey: ${DiscoveryKey:-}
+      DiscoveryUsername: ${DiscoveryUsername:-}
+      DiscoveryPassword: ${DiscoveryPassword:-}
+    volumes:
+      - type: volume
+        source: license-data
+        target: /edgexpert/licenses/
+        read_only: true
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-opc-ua-pubsub:
+    image: iotechsys/${EX_REPO}-device-opc-ua-pubsub:${EX_VER}
+    container_name: device-opc-ua-pubsub
+    hostname: device-opc-ua-pubsub
+    privileged: true
+    networks:
+    - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: <host_ip>
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+      - type: bind
+        source: /sys/
+        target: /sys/
+      - type: bind
+        source: ${C_DS_HOSTS_FILE_PATH}
+        target: /etc/hosts
+      - type: bind
+        source: /proc/1/ns/
+        target: /rootns
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-bacnet:
+    image: iotechsys/${EX_REPO}-device-bacnet:${EX_VER}
+    container_name: device-bacnet
+    hostname: device-bacnet
+    entrypoint: /device-bacnet-ip
+    networks:
+      - edgex-network
+    ports:
+      - "49980:49980"
+    #      - "49981:49981"
+    environment:
+      <<: *common-variables
+      Service_Host: device-bacnet
+      BACNET_BBMD_ADDRESS: ${BBMD_ADDRESS:-}
+      BACNET_BBMD_PORT: ${BBMD_PORT:-}
+      DEFAULT_DEVICE_PATH: ${DEFAULT_DEVICE_PATH:-}
+      EDGEX_CONF_DIR: /res/ip
+      EDGEX_CONFIGURATION_PROVIDER: ${EX_REG_ADDR:-}
+      EDGEX_INSTANCE_NAME: device-bacnet
+    volumes:
+      - type: volume
+        source: license-data
+        target: /edgexpert/licenses/
+        read_only: true
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+  #    devices:
+  #      - /dev/ttyUSB0
+
+  device-canbus:
+    image: iotechsys/${EX_REPO}-device-canbus:${EX_VER}
+    container_name: device-canbus
+    hostname: device-canbus
+    privileged: true
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: "<host-ip>"
+      Driver_Network_Mode: "RAW"
+      Driver_Network_Name: "can0"
+      Driver_Loopback: "0"
+      Driver_Recv_own_msgs: "0"
+    volumes:
+      - type: volume
+        source: license-data
+        target: /edgexpert/licenses/
+        read_only: true
+      - type: bind
+        source: /sys/
+        target: /sys/
+      - type: bind
+        source: ${C_DS_HOSTS_FILE_PATH}
+        target: /etc/hosts
+      - type: bind
+        source: /proc/1/ns/
+        target: /rootns
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-canopen:
+    image: iotechsys/${EX_REPO}-device-canopen:${EX_VER}
+    container_name: device-canopen
+    hostname: device-canopen
+    privileged: true
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: <host-ip>
+      BITRATE: <can-bitrate>
+    volumes:
+      - type: volume
+        source: license-data
+        target: /edgexpert/licenses/
+        read_only: true
+      - type: bind
+        source: /sys/
+        target: /sys/
+      - type: bind
+        source: ${C_DS_HOSTS_FILE_PATH}
+        target: /etc/hosts
+      - type: bind
+        source: /proc/1/ns/
+        target: /rootns
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-ethercat:
+    image: iotechsys/${EX_REPO}-device-ethercat:${EX_VER}
+    container_name: device-ethercat
+    hostname: device-ethercat
+    privileged: true
+    networks:
+      - edgex-network
+    cap_add:
+      - sys_nice
+    environment:
+      <<: *common-variables
+      Service_Host: <host_ip>
+      Driver_NetworkInterface1: <interface1>
+      Driver_CycleTime_us: <cycle_time>
+      Driver_FinalState: <final_state>
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+      - type: bind
+        source: /sys/
+        target: /sys/
+      - type: bind
+        source: ${C_DS_HOSTS_FILE_PATH}
+        target: /etc/hosts
+      - type: bind
+        source: /proc/1/ns/
+        target: /rootns
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-ethernet-ip:
+    image: iotechsys/${EX_REPO}-device-ethernet-ip:${EX_VER}
+    container_name: device-ethernet-ip
+    hostname: device-ethernet-ip
+    privileged: true
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: <host_ip>
+      Driver_NetworkInterface: <interface_name>
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+      - type: bind
+        source: /sys/
+        target: /sys/
+      - type: bind
+        source: ${C_DS_HOSTS_FILE_PATH}
+        target: /etc/hosts
+      - type: bind
+        source: /proc/1/ns/
+        target: /rootns
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-virtual:
+    image: iotechsys/${EX_REPO}-device-virtual:${EX_VER}
+    container_name: device-virtual
+    hostname: device-virtual
+    entrypoint: /device-virtual
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    ports:
+      - "49990:49990"
+    networks:
+      edgex-network:
+        aliases:
+          - device-virtual
+    environment:
+      <<: *common-variables
+      Service_Host: device-virtual
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - consul
+      - core-data
+      - core-metadata
+
+  device-modbus:
+    image: iotechsys/${EX_REPO}-device-modbus:${EX_VER}
+    container_name: device-modbus
+    hostname: device-modbus
+    entrypoint: /device-modbus
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    networks:
+      - edgex-network
+    ports:
+      - "49991:49991"
+    environment:
+      <<: *common-variables
+      Service_Host: device-modbus
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-mqtt:
+    image: iotechsys/${EX_REPO}-device-mqtt:${EX_VER}
+    container_name: device-mqtt
+    hostname: device-mqtt
+    entrypoint: /device-mqtt
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    networks:
+      - edgex-network
+    ports:
+      - "49982:49982"
+    environment:
+      <<: *common-variables
+      Service_Host: device-mqtt
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+      - mqtt-broker
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-grove:
+    image: iotechsys/${EX_REPO}-device-grove:${EX_VER}
+    container_name: device-grove
+    hostname: device-grove
+    entrypoint: /device-grove
+    command: "--confdir=/res --instance=device-grove ${EX_USE_REGISTRY:-} ${EX_REG_ADDR:-}"
+    networks:
+      - edgex-network
+    ports:
+      - "49992:49992"
+    environment:
+      <<: *common-variables
+      Service_Host: device-grove
+    #    devices:
+    #     - /dev/i2c-5 # for UP Squared (x86, 64-bit)
+    #      - /dev/i2c-1 # for Raspberry Pi (arm 32, 64-bit)
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-file:
+    image: iotechsys/${EX_REPO}-device-file:${EX_VER}
+    container_name: device-file
+    hostname: device-file
+    networks:
+      - edgex-network
+    ports:
+      - "49666:49666"
+    environment:
+      <<: *common-variables
+      Service_Host: device-file
+      Driver_Directory: <watched_dir>
+      Driver_Filetype: <filetype>
+    volumes:
+      - type: volume
+        source: license-data
+        target: /edgexpert/licenses/
+        read_only: true
+    #    - type: bind
+    #      source: /home/myUser/folder
+    #      target: /tmp/logs
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-zigbee:
+    image: iotechsys/${EX_REPO}-device-zigbee:${EX_VER}
+    container_name: device-zigbee
+    hostname: device-zigbee
+    networks:
+      - edgex-network
+    ports:
+      - "49972:49972"
+    environment:
+      <<: *common-variables
+      Service_Host: device-zigbee
+      ZIGBEE_MODULE: /dev/ttyHS0 #Dell Gateway 3002
+      ZIGBEE_BAUDRATE: 115200
+    devices:
+      - /dev/ttyHS0
+    volumes:
+      - type: volume
+        source: license-data
+        target: /edgexpert/licenses/
+        read_only: true
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-gps:
+    image: iotechsys/${EX_REPO}-device-gps:${EX_VER}
+    container_name: device-gps
+    hostname: device-gps
+    networks:
+      - edgex-network
+    ports:
+      - "49987:49987"
+    environment:
+      <<: *common-variables
+      Service_Host: device-gps
+      Driver_GpsdHostname: <gpsd_host>
+      Driver_GpsdPort: 2947
+      Driver_GpsdMode: poll
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-mems:
+    image: iotechsys/${EX_REPO}-device-mems:${EX_VER}
+    container_name: device-mems
+    hostname: device-mems
+    networks:
+      - edgex-network
+    ports:
+      - "49959:49959"
+    environment:
+      <<: *common-variables
+      Service_Host: device-mems
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-ble:
+    image: iotechsys/${EX_REPO}-device-ble:${EX_VER}
+    privileged: true
+    ports:
+      - "49984:49984"
+    container_name: device-ble
+    hostname: device-ble
+    networks:
+      - edgex-network
+    volumes:
+      - type: bind
+        source: /var/run/dbus/system_bus_socket
+        target: /var/run/dbus/system_bus_socket
+      - type: volume
+        source: license-data
+        target: /edgexpert/licenses/
+        read_only: true
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    environment:
+      <<: *common-variables
+      DRIVER_BLE_INTERFACE: "hci0"
+      DRIVER_BLE_DISCOVERYDURATION: 10
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  device-rest:
+    image: iotechsys/${EX_REPO}-device-rest:${EX_VER}
+    container_name: device-rest
+    hostname: device-rest
+    entrypoint: /device-rest-go
+    command: "--confdir=res ${EX_USE_REGISTRY:-} ${EX_USE_CP:-}"
+    ports:
+      - "49986:49986"
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: device-rest
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+    depends_on:
+      - core-data
+      - core-command
+
+  device-onvif:
+    image: iotechsys/${EX_REPO}-device-onvif:${EX_VER}
+    container_name: device-onvif
+    hostname: device-onvif
+    privileged: true
+    networks:
+    - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: <host_ip>
+    volumes:
+      - license-data:/edgexpert/licenses/:ro
+      - type: bind
+        source: /sys/
+        target: /sys/
+      - type: bind
+        source: ${C_DS_HOSTS_FILE_PATH}
+        target: /etc/hosts
+      - type: bind
+        source: /proc/1/ns/
+        target: /rootns
+    depends_on:
+      - core-metadata
+      - core-data
+      - core-command
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+  #################################################################
+  # Docs
+  #################################################################
+
+  docs:
+    image: iotechsys/${EX_REPO}-docs:${EX_VER}
+    container_name: edgexpert-docs
+    hostname: edgexpert-docs
+    networks:
+      - edgex-network
+    ports:
+      - "8888:80"
+    environment:
+      <<: *common-variables
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  #################################################################
+  # Tools
+  #################################################################
+
+  portainer:
+    image: portainer/portainer:1.22.2
+    container_name: portainer
+    hostname: edgex-portainer
+    command: -H unix:///var/run/docker.sock
+    networks:
+      - edgex-network
+    ports:
+      - "9000:9000"
+      - "8000:8000"
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      - type: volume
+        source: portainer-data
+        target: /data portainer/portainer
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  influxdb:
+    image: influxdb:1.7.9
+    container_name: influxdb
+    hostname: influxdb
+    networks:
+      edgex-network:
+        aliases:
+          - influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      INFLUXDB_HTTP_AUTH_ENABLED: "true"
+      INFLUXDB_ADMIN_USER: admin
+      INFLUXDB_ADMIN_PASSWORD: admin
+      INFLUXDB_DB: edgex
+      INFLUXDB_WRITE_USER: core
+      INFLUXDB_WRITE_USER_PASSWORD: password
+    depends_on:
+      - export-distro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  influxdb18:
+    image: influxdb:1.8.2
+    container_name: influxdb18
+    hostname: influxdb18
+    networks:
+      edgex-network:
+        aliases:
+          - influxdb18
+    ports:
+      - "8086:8086"
+    volumes:
+      - type: volume 
+        source: influxdb-data
+        target: /var/lib/influxdb
+    environment:
+      INFLUXDB_HTTP_AUTH_ENABLED: "true"
+      INFLUXDB_ADMIN_USER: admin
+      INFLUXDB_ADMIN_PASSWORD: admin
+      INFLUXDB_DB: edgex
+      INFLUXDB_WRITE_USER: core
+      INFLUXDB_WRITE_USER_PASSWORD: password
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    hostname: edgex-grafana
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: volume 
+        source: grafana-data
+        target: /var/lib/grafana
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  nodered:
+    image: nodered/node-red:latest 
+    container_name: nodered
+    hostname: edgex-nodered
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-nodered
+    ports:
+      - "1880:1880"
+    volumes:
+      - type: volume
+        source: nodered-data
+        target: /data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  mqtt-broker:
+    image: iotechsys/${EX_REPO}-mqtt-broker:${EX_VER}
+    container_name: mqtt-broker
+    hostname: mqtt-broker
+    networks:
+      - edgex-network
+    ports:
+      - "1883:1883"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  bacnet-server:
+    image: iotechsys/${EX_REPO}-bacnet-server:${EX_VER}
+    container_name: bacnet-server
+    hostname: bacnet-server
+    networks:
+      - edgex-network
+    depends_on:
+      - device-bacnet
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10mb"
+        max-file: "20"
+
+  kuiper:
+    image: emqx/kuiper:0.4.2-alpine
+    ports:
+      - "48075:48075"
+      - "20498:20498"
+    container_name: kuiper
+    hostname: kuiper
+    networks:
+      - edgex-network
+    environment:
+      # KUIPER_DEBUG: "true"
+      KUIPER_CONSOLE_LOG: "true"
+      KUIPER_REST_PORT: 48075
+      EDGEX_SERVICE_SERVER: http://core-data:48080
+      EDGEX_PROTOCOL: tcp
+      EDGEX_SERVER: core-data
+      EDGEX_PORT: 5563
+      EDGEX_TOPIC: events
+
+##########################################################
+
+  gauge:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.gauge
+    image: 'faucet/gauge:latest'
+    environment:
+      GAUGE_CONFIG: '/etc/faucet/gauge.yaml'
+    volumes:
+      - '/var/log/faucet:/var/log/faucet'
+      - '/etc/faucet:/etc/faucet'
+    ports:
+      - '6654:6653'
+      - '9303'
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-gauge
+    links:
+      - influxdb18
+
+  faucet:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.faucet
+    image: 'faucet/faucet:latest'
+    volumes:
+      - '/var/log/faucet:/var/log/faucet'
+      - '/etc/faucet:/etc/faucet'
+    ports:
+      - '6653:6653'
+      - '9302'
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-faucet
+    environment:
+      FAUCET_CONFIG_STAT_RELOAD: '${FAUCET_CONFIG_STAT_RELOAD}'
+      FAUCET_EVENT_SOCK: '${FAUCET_EVENT_SOCK}'
+      FAUCET_EVENT_SOCK_HEARTBEAT: '${FAUCET_EVENT_SOCK_HEARTBEAT}'
+
+  prometheus:
+    restart: always
+    image: 'prom/prometheus:v2.22.2'
+    user: 'root'
+    ports:
+      - '9090:9090'
+    networks:
+      edgex-network:
+        aliases:
+          - prometheus
+    volumes:
+      - '/opt/prometheus/:/prometheus'
+      - './etc/prometheus/prometheus-docker-compose.yml:/etc/prometheus/prometheus.yml'
+      - './etc/prometheus/faucet.rules.yml:/etc/prometheus/faucet.rules.yml'
+    links:
+      - faucet
+      - gauge
+
+
+networks:
+  edgex-network:
+    driver: "bridge"
+...
