@@ -13,6 +13,7 @@ volumes:
   license-data:
   profile-modeling-data:
   influxdb-data:
+  prometheus-data:
 
 
 # all common shared environment variables defined here:
@@ -1150,6 +1151,7 @@ services:
 
   gauge:
     restart: always
+    container_name: gauge
     build:
       context: .
       dockerfile: Dockerfile.gauge
@@ -1171,6 +1173,7 @@ services:
 
   faucet:
     restart: always
+    container_name: faucet
     build:
       context: .
       dockerfile: Dockerfile.faucet
@@ -1193,6 +1196,7 @@ services:
   prometheus:
     restart: always
     image: 'prom/prometheus:v2.22.2'
+    container_name: prometheus
     user: 'root'
     ports:
       - '9090:9090'
@@ -1201,13 +1205,56 @@ services:
         aliases:
           - prometheus
     volumes:
-      - '/opt/prometheus/:/prometheus'
-      - './etc/prometheus/prometheus-docker-compose.yml:/etc/prometheus/prometheus.yml'
-      - './etc/prometheus/faucet.rules.yml:/etc/prometheus/faucet.rules.yml'
+#      - '/opt/prometheus/:/prometheus'
+      - '/home/snuc/ovswitch/faucet/etc/prometheus/prometheus-docker-compose.yml:/etc/prometheus/prometheus.yml'
+      - '/home/snuc/ovswitch/faucet/etc/prometheus/faucet.rules.yml:/etc/prometheus/faucet.rules.yml'
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
     links:
       - faucet
       - gauge
+      - nodeexporter
+      - cadvisor
 
+
+  nodeexporter:
+    image: prom/node-exporter:v1.0.1
+    container_name: nodeexporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: unless-stopped
+    ports:
+      - '9100'
+    networks:
+      - edgex-network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.38.6
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+    restart: unless-stopped
+    ports:
+      - '8080'
+    networks:
+      - edgex-network
 
 networks:
   edgex-network:
