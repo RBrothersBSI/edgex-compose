@@ -227,8 +227,8 @@ services:
       Service_Host: export-distro
       Clients_Export_Host: export-client
       MessageQueue_Host: core-data
-      Certificates_MQTTS_Cert: 'dummy.crt'
-      Certificates_MQTTS_Key: 'dummy.key'
+      Certificates_MQTTS_Cert: 'rsa_cert.pem'
+      Certificates_MQTTS_Key: 'rsa_private.pem'
       Certificates_AWS_Cert: 'dummy.crt'
       Certificates_AWS_Key: 'dummy.key'
     volumes:
